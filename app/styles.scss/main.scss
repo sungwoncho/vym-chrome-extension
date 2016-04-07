@@ -1,0 +1,6 @@
+.vym-slide {
+
+  &:not(.vym-current-slide) {
+    display: none;
+  }
+}
