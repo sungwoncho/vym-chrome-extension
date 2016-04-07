@@ -1,0 +1,28 @@
+{
+  "name": "Vym",
+  "version": "0.0.1",
+  "author": "vym",
+  "manifest_version": 2,
+  "description": "Vym Chrome extension",
+  "icons": {
+    "16": "images/icon-16.png",
+    "128": "images/icon-128.png"
+  },
+  "default_locale": "en",
+  "background": {
+    "scripts": [
+      "scripts/chrome_reload.js",
+      "scripts/background.js"
+    ]
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://github.com/*/*/pull/*/files"],
+      "js": [
+        "bower_components/jquery/dist/jquery.min.js",
+        "scripts/content_script.js"
+      ]
+    }
+  ],
+  "permissions": []
+}
