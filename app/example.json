@@ -1,0 +1,33 @@
+{
+  "slides": [
+    {
+      "sections": [
+        {
+          "type": "file",
+          "fileHeader": ".meteor/versions"
+        },
+        {
+          "type": "file",
+          "fileHeader": ".meteor/packages"
+        }
+      ]
+    },
+    {
+      "sections": [
+        {
+          "type": "file",
+          "fileHeader": "both/routes.js"
+        }
+      ]
+    },
+    {
+      "sections":
+      [
+        {
+          "type": "file",
+          "fileHader": "client/subscriptionj"
+        }
+      ]
+    }
+  ]
+}
