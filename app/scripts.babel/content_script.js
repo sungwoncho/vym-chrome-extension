@@ -6,10 +6,10 @@ console.log('VYM loaded');
 
 const filesPathRegex = /.*\/.*\/pull\/.*/;
 
-$(document).on('ready pjax:success', function () {
-  if (filesPathRegex.test(window.location.pathname)) {
+let init = function () {
+  console.log('init...');
 
-    $(templates.tab).insertAfter($('.tabnav-tab.js-pjax-history-navigate').has('.octicon-diff'));
+  if (filesPathRegex.test(window.location.pathname)) {
 
     $(document).on('click', '.vym-slide-nav', function (e) {
       e.preventDefault();
@@ -53,4 +53,14 @@ $(document).on('ready pjax:success', function () {
     }
 
   }
+};
+
+$(window).on('hashchange', function () {
+  init();
+});
+
+$(document).on('ready pjax:success', function () {
+  $(templates.tab).insertAfter($('.tabnav-tab.js-pjax-history-navigate').has('.octicon-diff'));
+
+  init();
 });
