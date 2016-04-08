@@ -17,7 +17,7 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://github.com/*"],
+      "matches": ["https://github.com/*", "http://blog.vym.io/*"],
       "js": [
         "bower_components/jquery/dist/jquery.min.js",
         "scripts/content_script.js"
@@ -28,5 +28,8 @@
       "run_at": "document_end"
     }
   ],
-  "permissions": []
+  "permissions": [
+    "http://0.0.0.0:3000/*",
+    "https://0.0.0.0:3000/*"
+  ]
 }

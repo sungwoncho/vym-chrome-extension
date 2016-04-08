@@ -1,43 +1,56 @@
 import SlideEngine from './slide_engine';
+import genieAPI from './vym_genie_api';
+import templates from './templates';
 
 console.log('VYM loaded');
 
-let fs = require('fs');
-let exampleData = JSON.parse(fs.readFileSync(__dirname + '/../slide_deck_example.json', 'utf-8'));
-let dom = require('./dom');
-
-const filesPathRegex = /.*\/.*\/pull\/\d\/files/;
+const filesPathRegex = /.*\/.*\/pull\/.*/;
 
 $(document).on('ready pjax:success', function () {
-  dom.mountTab();
-  dom.listen();
-});
+  if (filesPathRegex.test(window.location.pathname)) {
 
-$(window).on('hashchange', function () {
-  if (filesPathRegex.test(window.location.pathname) && window.location.hash === '#slides') {
-    console.log('mounting slide engine and slides...');
+    $(templates.tab).insertAfter($('.tabnav-tab.js-pjax-history-navigate').has('.octicon-diff'));
 
-    $('.diff-view').hide(); // Hide the original diff view
-    dom.mountEngine();
-    dom.mountSlides(exampleData);
+    $(document).on('click', '.vym-slide-nav', function (e) {
+      e.preventDefault();
 
-    function refreshCurrentSlide(number) {
-      console.log('refreshing for', number);
-      $('.vym-slide').removeClass('vym-current-slide');
-      $(`.vym-slide-${number}`).addClass('vym-current-slide');
+      $('.tabnav-tab.js-pjax-history-navigate').removeClass('selected');
+      $(e.target).addClass('selected');
+      var newPath = window.location.pathname.replace(/(.*)\/.*$/, function(match, p1) { return p1 + '/files#slides'; });
+      window.location.replace(newPath);
+      window.location.hash = '#slides';
+    });
+
+    if (window.location.hash === '#slides') {
+      $('.tabnav-tab.js-pjax-history-navigate').removeClass('selected');
+      $('.vym-slide-nav').addClass('selected');
+
+      console.log('mounting slide engine and slides...');
+
+      let ownerName = window.location.pathname.split('/')[1];
+      let repoName = window.location.pathname.split('/')[2];
+      let prNumber = window.location.pathname.split('/')[4];
+
+      genieAPI.getSlideDeck({ownerName, repoName, prNumber}, function (err, res) {
+        console.log('getting slide deck');
+
+        let slideDeck = res.body;
+
+        if (err) {
+          return console.log(err);
+        }
+
+        let engine = new SlideEngine(slideDeck);
+        engine.mount();
+
+        $(document).on('click', '.vym-nav-next', function () {
+          engine.moveNext();
+        });
+        $(document).on('click', '.vym-nav-prev', function () {
+          engine.movePrev();
+        });
+      });
     }
 
-    let engine = new SlideEngine(exampleData);
-
-    refreshCurrentSlide(engine.currentSlideNumber);
-
-    $(document).on('click', '.vym-nav-next', function () {
-      engine.moveNext();
-      refreshCurrentSlide(engine.currentSlideNumber);
-    });
-    $(document).on('click', '.vym-nav-prev', function () {
-      engine.movePrev();
-      refreshCurrentSlide(engine.currentSlideNumber);
-    });
   }
 });

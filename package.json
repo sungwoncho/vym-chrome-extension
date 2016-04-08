@@ -60,6 +60,7 @@
     "event-stream": "^3.3.2",
     "glob": "^7.0.3",
     "lodash": "^4.8.2",
+    "request": "^2.70.0",
     "vinyl-source-stream": "^1.1.0"
   }
 }
