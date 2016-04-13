@@ -2,5 +2,6 @@ let fs = require('fs'); // Need to use require rather than import due to browser
 
 module.exports = {
   engine: fs.readFileSync(__dirname + '/../templates/slide_engine.html', 'utf-8'),
-  tab: fs.readFileSync(__dirname + '/../templates/tab.html', 'utf-8')
+  tab: fs.readFileSync(__dirname + '/../templates/tab.html', 'utf-8'),
+  wizard: fs.readFileSync(__dirname + '/../templates/wizard.html', 'utf-8')
 };

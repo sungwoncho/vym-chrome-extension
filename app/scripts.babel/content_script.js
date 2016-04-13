@@ -22,37 +22,41 @@ let init = function () {
     });
 
     if (window.location.hash === '#slides') {
-      $('.tabnav-tab.js-pjax-history-navigate').removeClass('selected');
-      $('.vym-slide-nav').addClass('selected');
+      initEngine();
+    }
+  }
+};
 
-      console.log('mounting slide engine and slides...');
+let initEngine = function () {
+  $('.tabnav-tab.js-pjax-history-navigate').removeClass('selected');
+  $('.vym-slide-nav').addClass('selected');
 
-      let ownerName = window.location.pathname.split('/')[1];
-      let repoName = window.location.pathname.split('/')[2];
-      let prNumber = window.location.pathname.split('/')[4];
+  console.log('mounting slide engine and slides...');
 
-      genieAPI.getSlideDeck({ownerName, repoName, prNumber}, function (err, res) {
-        console.log('getting slide deck');
+  let ownerName = window.location.pathname.split('/')[1];
+  let repoName = window.location.pathname.split('/')[2];
+  let prNumber = window.location.pathname.split('/')[4];
 
-        let slideDeck = res.body;
+  genieAPI.getSlideDeck({ownerName, repoName, prNumber}, function (err, res) {
+    console.log('getting slide deck');
 
-        if (err) {
-          return console.log(err);
-        }
+    let slideDeck = res.body;
 
-        let engine = new SlideEngine(slideDeck);
-        engine.mount();
-
-        $(document).on('click', '.vym-nav-next', function () {
-          engine.moveNext();
-        });
-        $(document).on('click', '.vym-nav-prev', function () {
-          engine.movePrev();
-        });
-      });
+    if (err) {
+      return console.log(err);
     }
 
-  }
+    let engine = new SlideEngine(slideDeck);
+    engine.mountEngine();
+    engine.mountSlides();
+
+    $(document).on('click', '.vym-nav-next', function () {
+      engine.moveNext();
+    });
+    $(document).on('click', '.vym-nav-prev', function () {
+      engine.movePrev();
+    });
+  });
 };
 
 $(window).on('hashchange', function () {
