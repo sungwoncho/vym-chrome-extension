@@ -2,6 +2,7 @@
   "name": "Vym",
   "version": "0.1.0",
   "author": "vym",
+  "short_name": "A slide deck for your GitHub PR",
   "manifest_version": 2,
   "description": "Vym Chrome extension",
   "icons": {
