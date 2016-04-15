@@ -1,6 +1,6 @@
 import request from 'request';
 
-const endpoint = 'https://b73c0387.ngrok.io/api/v1';
+const endpoint = 'https://12bca05b.ngrok.io/api/v1';
 
 export default {
   /**

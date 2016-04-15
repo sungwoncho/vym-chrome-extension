@@ -28,17 +28,33 @@ class SlideEngine {
       });
     });
 
-    this.refreshCurrentSlide();
-  }
+    $('.vym-total-slide-count').text(this.slideCount);
 
-  unmountSlides() {
-    $('.vym-slides').empty();
+    this.refreshCurrentSlide();
   }
 
   refreshCurrentSlide(number = 1) {
     console.log('refreshing for', number);
+    console.log(this.slideDeck);
+    console.log(this.slideCount);
+
+    this.currentSlideNumber = number;
     $('.vym-slide').removeClass('vym-current-slide');
     $(`.vym-slide-${number}`).addClass('vym-current-slide');
+
+    $('.vym-current-slide-number').text(number);
+
+    if (!this.hasNext()) {
+      $('.vym-nav-next').attr('disabled', true);
+    } else {
+      $('.vym-nav-next').removeAttr('disabled');
+    }
+
+    if (!this.hasPrev()) {
+      $('.vym-nav-prev').attr('disabled', true);
+    } else {
+      $('.vym-nav-prev').removeAttr('disabled');
+    }
   }
 
   toggleEditMode() {
@@ -64,7 +80,7 @@ class SlideEngine {
   }
 
   hasNext() {
-    return this.slidesCount > this.currentSlideNumber;
+    return this.slideCount > this.currentSlideNumber;
   }
 
   hasPrev() {

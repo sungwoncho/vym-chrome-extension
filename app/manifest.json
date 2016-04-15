@@ -5,8 +5,7 @@
   "manifest_version": 2,
   "description": "Vym Chrome extension",
   "icons": {
-    "16": "images/icon-16.png",
-    "128": "images/icon-128.png"
+    "16": "images/icon-16.png"
   },
   "default_locale": "en",
   "background": {
@@ -31,6 +30,6 @@
   "permissions": [
     "http://0.0.0.0:3000/*",
     "https://0.0.0.0:3000/*",
-    "https://b73c0387.ngrok.io/*"
+    "https://12bca05b.ngrok.io/*"
   ]
 }
