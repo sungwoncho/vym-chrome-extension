@@ -10,8 +10,12 @@ import source from 'vinyl-source-stream';
 import es from 'event-stream';
 import glob from 'glob';
 import path from 'path';
+import replace from 'gulp-replace';
+import rename from 'gulp-rename';
 
 const $ = gulpLoadPlugins();
+const vymHost = process.env.NODE_ENV === 'production' ? 'https://vym.io' : 'https://ea8916e8.ngrok.io';
+
 
 gulp.task('extras', () => {
   return gulp.src([
@@ -80,6 +84,7 @@ gulp.task('html', ['styles'], () => {
 
 gulp.task('chromeManifest', () => {
   return gulp.src('app/manifest.json')
+    .pipe(replace('__VYM_HOST__', vymHost))
     .pipe($.chromeManifest({
       buildnumber: true,
       background: {
@@ -117,7 +122,21 @@ gulp.task('babel', () => {
 
 gulp.task('clean', del.bind(null, ['.tmp', 'dist']));
 
-gulp.task('watch', ['lint', 'babel', 'html'], () => {
+gulp.task('replace', () => {
+  gulp.src([
+    'app/scripts/**/*.js',
+  ]).pipe(replace('__VYM_HOST__', vymHost))
+    .pipe(gulp.dest('app/scripts'));
+});
+
+gulp.task('build_manifest', () => {
+  gulp.src('app/manifest_draft.json')
+    .pipe(replace('__VYM_HOST__', vymHost))
+    .pipe(rename('manifest.json'))
+    .pipe(gulp.dest('app'));
+});
+
+gulp.task('watch', ['lint', 'babel', 'html', 'replace', 'build_manifest'], () => {
   $.livereload.listen();
 
   gulp.watch([
@@ -125,11 +144,13 @@ gulp.task('watch', ['lint', 'babel', 'html'], () => {
     'app/scripts/**/*.js',
     'app/images/**/*',
     'app/styles/**/*',
-    'app/_locales/**/*.json'
+    'app/_locales/**/*.json',
+    'app/templates/**/*'
   ]).on('change', $.livereload.reload);
 
-  gulp.watch('app/scripts.babel/**/*.js', ['lint', 'babel']);
+  gulp.watch('app/scripts.babel/**/*.js', ['lint', 'babel', 'replace']);
   gulp.watch('app/styles.scss/**/*.scss', ['styles']);
+  gulp.watch('app/manifest_draft.json', ['build_manifest']);
   gulp.watch('bower.json', ['wiredep']);
 });
 
@@ -154,7 +175,7 @@ gulp.task('package', function () {
 
 gulp.task('build', (cb) => {
   runSequence(
-    'lint', 'babel', 'chromeManifest',
+    'lint', 'babel', 'replace', 'build_manifest', 'chromeManifest',
     ['html', 'images', 'extras'],
     'size', cb);
 });

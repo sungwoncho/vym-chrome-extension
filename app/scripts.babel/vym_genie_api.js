@@ -1,6 +1,6 @@
 import request from 'request';
 
-const endpoint = 'https://vym.io/api/v1';
+const endpoint = '__VYM_HOST__/api/v1';
 
 export default {
   /**

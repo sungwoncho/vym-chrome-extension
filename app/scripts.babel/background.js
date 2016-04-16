@@ -1,7 +1,7 @@
 'use strict';
 
 chrome.runtime.onInstalled.addListener(details => {
-  console.log('previousVersion', details.previousVersion);
+  chrome.tabs.create({
+    url: '__VYM_HOST__/api/v1/auth/github'
+  });
 });
-
-console.log('\'Allo \'Allo! Event Page');
