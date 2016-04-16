@@ -114,6 +114,7 @@ gulp.task('babel', () => {
       .transform('brfs')
       .bundle()
       .pipe(source(file))
+      .pipe(replace('__VYM_HOST__', vymHost))
       .pipe(gulp.dest('app/scripts'));
   });
 
@@ -122,12 +123,12 @@ gulp.task('babel', () => {
 
 gulp.task('clean', del.bind(null, ['.tmp', 'dist']));
 
-gulp.task('replace', () => {
-  gulp.src([
-    'app/scripts/**/*.js',
-  ]).pipe(replace('__VYM_HOST__', vymHost))
-    .pipe(gulp.dest('app/scripts'));
-});
+// gulp.task('replace', () => {
+//   gulp.src([
+//     'app/scripts/**/*.js',
+//   ]).pipe(replace('__VYM_HOST__', vymHost))
+//     .pipe(gulp.dest('app/scripts'));
+// });
 
 gulp.task('build_manifest', () => {
   gulp.src('app/manifest_draft.json')
@@ -136,7 +137,7 @@ gulp.task('build_manifest', () => {
     .pipe(gulp.dest('app'));
 });
 
-gulp.task('watch', ['lint', 'babel', 'html', 'replace', 'build_manifest'], () => {
+gulp.task('watch', ['lint', 'babel', 'html', 'build_manifest'], () => {
   $.livereload.listen();
 
   gulp.watch([
@@ -148,7 +149,7 @@ gulp.task('watch', ['lint', 'babel', 'html', 'replace', 'build_manifest'], () =>
     'app/templates/**/*'
   ]).on('change', $.livereload.reload);
 
-  gulp.watch('app/scripts.babel/**/*.js', ['lint', 'babel', 'replace']);
+  gulp.watch('app/scripts.babel/**/*.js', ['lint', 'babel']);
   gulp.watch('app/styles.scss/**/*.scss', ['styles']);
   gulp.watch('app/manifest_draft.json', ['build_manifest']);
   gulp.watch('bower.json', ['wiredep']);
@@ -175,7 +176,7 @@ gulp.task('package', function () {
 
 gulp.task('build', (cb) => {
   runSequence(
-    'lint', 'babel', 'replace', 'build_manifest', 'chromeManifest',
+    'lint', 'babel', 'build_manifest', 'chromeManifest',
     ['html', 'images', 'extras'],
     'size', cb);
 });
