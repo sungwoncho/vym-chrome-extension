@@ -68,3 +68,23 @@ $(document).on('ready pjax:success', function () {
 
   init();
 });
+
+$(document).on('ready', function () {
+  function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)", "i"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+  }
+
+  let vymToken = getParameterByName('vymToken');
+
+  if (vymToken) {
+    chrome.storage.sync.set({vymToken}, function () {
+      window.location = 'https://github.com';
+    });
+  }
+});
