@@ -19,5 +19,21 @@ export default {
       `/${options.prNumber}`;
 
     get({url, qs: {vymToken: options.vymToken}, json: true}, done);
+  },
+
+  /**
+   * options {Object}
+   * options.ownerName {String}
+   * options.repoName {String}
+   * options.vymToken {String} - used to authorize user
+   */
+  checkRepoActivated(options, done) {
+    let url =
+      '__VYM_HOST__/api/v1' +
+      '/repo' +
+      `/${options.ownerName}` +
+      `/${options.repoName}`;
+
+    get({url, qs: {vymToken: options.vymToken}, json: true}, done);
   }
 };
