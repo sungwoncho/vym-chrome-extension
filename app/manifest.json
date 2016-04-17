@@ -31,7 +31,7 @@
     }
   ],
   "permissions": [
-    "https://ea8916e8.ngrok.io/*",
+    "https://c5d138db.ngrok.io/*",
     "storage"
   ]
 }

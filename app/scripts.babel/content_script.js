@@ -1,5 +1,5 @@
 import SlideEngine from './slide_engine';
-import genieAPI from './vym_genie_api';
+import vymAPI from './vym_api';
 import templates from './templates';
 
 console.log('VYM loaded');
@@ -36,25 +36,26 @@ let initEngine = function () {
   let ownerName = window.location.pathname.split('/')[1];
   let repoName = window.location.pathname.split('/')[2];
   let prNumber = window.location.pathname.split('/')[4];
+  chrome.storage.sync.get('vymToken', function (items) {
+    vymAPI.getSlideDeck({ownerName, repoName, prNumber, vymToken: items.vymToken}, function (err, res) {
+      console.log('getting slide deck');
 
-  genieAPI.getSlideDeck({ownerName, repoName, prNumber}, function (err, res) {
-    console.log('getting slide deck');
+      let slideDeck = res.body;
 
-    let slideDeck = res.body;
+      if (err) {
+        return console.log(err);
+      }
 
-    if (err) {
-      return console.log(err);
-    }
+      let engine = new SlideEngine(slideDeck);
+      engine.mountEngine();
+      engine.mountSlides();
 
-    let engine = new SlideEngine(slideDeck);
-    engine.mountEngine();
-    engine.mountSlides();
-
-    $(document).on('click', '.vym-nav-next', function () {
-      engine.moveNext();
-    });
-    $(document).on('click', '.vym-nav-prev', function () {
-      engine.movePrev();
+      $(document).on('click', '.vym-nav-next', function () {
+        engine.moveNext();
+      });
+      $(document).on('click', '.vym-nav-prev', function () {
+        engine.movePrev();
+      });
     });
   });
 };
