@@ -41,13 +41,14 @@ function initEngine() {
   });
 };
 
-$(document).on('ready pjax:success hashchange', function () {
+function initInterface() {
   const filesPathRegex = /.*\/.*\/pull\/.*/;
+  let currentPath = window.location.pathname;
 
-  if (filesPathRegex.test(window.location.pathname)) {
+  if (filesPathRegex.test(currentPath)) {
 
-    let ownerName = window.location.pathname.split('/')[1];
-    let repoName = window.location.pathname.split('/')[2];
+    let ownerName = currentPath.split('/')[1];
+    let repoName = currentPath.split('/')[2];
 
     vymAPI.checkRepoActivated({ownerName, repoName}, function (err, res) {
       if (!res.body.activated) {
@@ -62,9 +63,15 @@ $(document).on('ready pjax:success hashchange', function () {
 
         $('.tabnav-tab.js-pjax-history-navigate').removeClass('selected');
         $(e.target).addClass('selected');
-        var newPath = window.location.pathname.replace(/(.*)\/.*$/, function(match, p1) { return p1 + '/files#slides'; });
-        window.location.replace(newPath);
-        window.location.hash = '#slides';
+
+        // Change the current location to
+        // /:ownerName/:repoName/pull/:prNumber/files#slides
+        if (/.*\/.*\/pull\/\d*$/.test(currentPath)) {
+          window.location.replace(currentPath + '/files#slides');
+        } else {
+          let newPath = currentPath.replace(/(.*)\/.*$/, function(match, p1) { return p1 + '/files#slides'; });
+          window.location.replace(newPath);
+        }
       });
 
       if (window.location.hash === '#slides') {
@@ -73,6 +80,14 @@ $(document).on('ready pjax:success hashchange', function () {
 
     });
   }
+}
+
+$(window).on('hashchange', function () {
+  initInterface();
+});
+
+$(document).on('ready pjax:success', function () {
+  initInterface();
 });
 
 // Fired when GitHub is opened after installing the extension
