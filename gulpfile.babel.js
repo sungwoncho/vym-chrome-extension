@@ -83,7 +83,6 @@ gulp.task('html', ['styles'], () => {
 
 gulp.task('chromeManifest', () => {
   return gulp.src('app/manifest.json')
-    .pipe(replace('__VYM_HOST__', vymHost))
     .pipe($.chromeManifest({
       buildnumber: true,
       background: {
@@ -123,14 +122,8 @@ gulp.task('babel', () => {
 
 gulp.task('clean', del.bind(null, ['.tmp', 'dist']));
 
-// gulp.task('replace', () => {
-//   gulp.src([
-//     'app/scripts/**/*.js',
-//   ]).pipe(replace('__VYM_HOST__', vymHost))
-//     .pipe(gulp.dest('app/scripts'));
-// });
-
 gulp.task('build_manifest', () => {
+
   gulp.src('app/manifest_draft.json')
     .pipe(replace('__VYM_HOST__', vymHost))
     .pipe(rename('manifest.json'))
