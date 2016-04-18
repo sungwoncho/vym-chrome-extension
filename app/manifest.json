@@ -1,6 +1,6 @@
 {
   "name": "Vym",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "vym",
   "short_name": "A slide deck for your GitHub PR",
   "manifest_version": 2,
@@ -31,7 +31,7 @@
     }
   ],
   "permissions": [
-    "https://b47beebe.ngrok.io/*",
+    "https://vym.io/*",
     "storage"
   ]
 }
