@@ -15,7 +15,25 @@ class SlideEngine {
   }
 
   mountUncoveredFilesSection() {
-    this.slideDeck.uncoveredFiles.forEach(function (filename) {
+    // Find files that are not covered by the slide deck
+    let filenames = $('.file-header').map(function () {
+      return $(this).data('path');
+    });
+
+    filenames = $.makeArray(filenames);
+
+    this.slideDeck.slides.forEach(function (slide) {
+      slide.sections.forEach(function (section) {
+        if (section.type === 'file') {
+          let index = filenames.indexOf(section.filename);
+          if (index > -1) {
+            filenames.splice(index, 1);
+          }
+        }
+      });
+    });
+
+    filenames.forEach(function (filename) {
       $(`.file-header[data-path='${filename}']`)
         .closest('.file')
         .appendTo('.vym-uncovered-files-section');
