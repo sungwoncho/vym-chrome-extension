@@ -5,31 +5,42 @@
   }
 }
 
-.vym-slide-nav {
+.vym-slide-menu {
   background-color: #F7F7F7;
   display: block;
   border-radius: 2px;
-  text-align: center;
-  padding: 1em 0;
+  padding: 1em 1.5em;
   background-color: #EFECEC;
   margin-bottom: 1.5em;
+  text-align: center;
+  overflow: auto;
 
-  .vym-slide-number-tracker {
-    margin-left: 10px;
-    margin-right: 10px;
-    display: inline-block;
+  .vym-main-menu {
+    float: right;
+    margin-top: 4px;
   }
 
-  .vym-current-slide-number {
-    display: inline-block;
-  }
+  .vym-slide-navigation {
 
-  .vym-slide-number-divider {
-    display: inline-block;
-  }
+    float: left;
 
-  .vym-total-slide-count {
-    display: inline-block;
+    .vym-slide-number-tracker {
+      margin-left: 10px;
+      margin-right: 10px;
+      display: inline-block;
+    }
+
+    .vym-current-slide-number {
+      display: inline-block;
+    }
+
+    .vym-slide-number-divider {
+      display: inline-block;
+    }
+
+    .vym-total-slide-count {
+      display: inline-block;
+    }
   }
 }
 

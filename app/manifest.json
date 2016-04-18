@@ -31,7 +31,7 @@
     }
   ],
   "permissions": [
-    "https://vym.io/*",
+    "https://513745a2.ngrok.io/*",
     "storage"
   ]
 }

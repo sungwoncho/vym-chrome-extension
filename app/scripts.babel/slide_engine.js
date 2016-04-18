@@ -14,6 +14,14 @@ class SlideEngine {
     $(templates.engine).insertBefore('.diff-view');
   }
 
+  mountUncoveredFilesSection() {
+    this.slideDeck.uncoveredFiles.forEach(function (filename) {
+      $(`.file-header[data-path='${filename}']`)
+        .closest('.file')
+        .appendTo('.vym-uncovered-files-section');
+    });
+  }
+
   mountSlides() {
     this.slideDeck.slides.forEach(function (slide) {
       $('<div/>', {

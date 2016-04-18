@@ -14,7 +14,7 @@ import replace from 'gulp-replace';
 import rename from 'gulp-rename';
 
 const $ = gulpLoadPlugins();
-const vymHost = process.env.NODE_ENV === 'production' ? 'https://vym.io' : 'https://b47beebe.ngrok.io';
+const vymHost = process.env.NODE_ENV === 'production' ? 'https://vym.io' : 'https://513745a2.ngrok.io';
 
 gulp.task('extras', () => {
   return gulp.src([
@@ -138,14 +138,25 @@ gulp.task('watch', ['lint', 'babel', 'html', 'build_manifest'], () => {
     'app/scripts/**/*.js',
     'app/images/**/*',
     'app/styles/**/*',
-    'app/_locales/**/*.json',
-    'app/templates/**/*'
+    'app/_locales/**/*.json'
   ]).on('change', $.livereload.reload);
 
   gulp.watch('app/scripts.babel/**/*.js', ['lint', 'babel']);
   gulp.watch('app/styles.scss/**/*.scss', ['styles']);
   gulp.watch('app/manifest_draft.json', ['build_manifest']);
   gulp.watch('bower.json', ['wiredep']);
+  gulp.watch('app/templates/**/*', ['refresh_template']);
+});
+
+gulp.task('refresh_template', () => {
+    browserify({
+      entries: 'app/scripts.babel/templates.js',
+      debug: true
+    }).transform('babelify', { presets: ['es2015'] })
+      .transform('brfs')
+      .bundle()
+      .pipe(source('templates.js'))
+      .pipe(gulp.dest('app/scripts'));
 });
 
 gulp.task('size', () => {

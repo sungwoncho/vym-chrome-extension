@@ -30,6 +30,7 @@ function initEngine() {
 
       let engine = new SlideEngine(slideDeck);
       engine.mountEngine();
+      engine.mountUncoveredFilesSection();
       engine.mountSlides();
 
       $(document).on('click', '.vym-nav-next', function () {
@@ -37,6 +38,21 @@ function initEngine() {
       });
       $(document).on('click', '.vym-nav-prev', function () {
         engine.movePrev();
+      });
+      $(document).on('click', '.vym-toggle-uncovered-section', function (e) {
+        e.preventDefault();
+
+        $('.vym-slides').toggle();
+        $('.vym-uncovered-files-section').toggle();
+
+        if ($('.vym-uncovered-files-section').is(':visible')) {
+          $('.vym-slide-navigation').hide();
+          $('.vym-toggle-uncovered-section').text('Back to slides');
+        } else {
+          $('.vym-slide-navigation').show();
+          $('.vym-toggle-uncovered-section').text('View uncovered files');
+        }
+
       });
     });
   });
