@@ -1,21 +1,22 @@
 import SlideEngine from './slide_engine';
 import vymAPI from './vym_api';
 import templates from './templates';
+import debug from './debugger';
 
-console.log('VYM loaded');
+debug('Vym is loaded');
 
 function initEngine() {
   $('.tabnav-tab.js-pjax-history-navigate').removeClass('selected');
   $('.vym-slide-nav').addClass('selected');
 
-  console.log('mounting slide engine and slides...');
+  debug('Mounting the slide engine and slides...');
 
   let ownerName = window.location.pathname.split('/')[1];
   let repoName = window.location.pathname.split('/')[2];
   let prNumber = window.location.pathname.split('/')[4];
   chrome.storage.sync.get('vymToken', function (items) {
     vymAPI.getSlideDeck({ownerName, repoName, prNumber, vymToken: items.vymToken}, function (err, res) {
-      console.log('getting slide deck');
+      debug('Got slide deck', slideDeck);
 
       let {slideDeck} = res.body;
 
@@ -107,7 +108,7 @@ $(document).on('ready', function () {
   if (vymToken) {
     chrome.storage.sync.set({vymToken}, function () {
       vymAPI.syncRepoAccess({vymToken}, function (err) {
-        console.log('syncing access');
+        debug('Syncing repo access');
         if (err) {
           console.log(err);
         }

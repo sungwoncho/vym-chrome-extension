@@ -16,7 +16,6 @@ import rename from 'gulp-rename';
 const $ = gulpLoadPlugins();
 const vymHost = process.env.NODE_ENV === 'production' ? 'https://vym.io' : 'https://b47beebe.ngrok.io';
 
-
 gulp.task('extras', () => {
   return gulp.src([
     'app/*.*',
@@ -115,6 +114,7 @@ gulp.task('babel', () => {
       .bundle()
       .pipe(source(file))
       .pipe(replace('__VYM_HOST__', vymHost))
+      .pipe(replace('__VYM_IS_PRODUCTION__', process.env.NODE_ENV === 'production'))
       .pipe(gulp.dest('app/scripts'));
   });
 

@@ -1,4 +1,5 @@
 import templates from './templates';
+import debug from './debugger';
 
 class SlideEngine {
   constructor(slideDeck) {
@@ -34,9 +35,7 @@ class SlideEngine {
   }
 
   refreshCurrentSlide(number = 1) {
-    console.log('refreshing for', number);
-    console.log(this.slideDeck);
-    console.log(this.slideCount);
+    debug('Refreshing the current slide to', number);
 
     this.currentSlideNumber = number;
     $('.vym-slide').removeClass('vym-current-slide');
