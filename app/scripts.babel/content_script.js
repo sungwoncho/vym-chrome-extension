@@ -106,7 +106,15 @@ $(document).on('ready', function () {
 
   if (vymToken) {
     chrome.storage.sync.set({vymToken}, function () {
-      window.location = 'https://github.com';
+      vymAPI.syncRepoAccess({vymToken}, function (err) {
+        console.log('syncing access');
+        if (err) {
+          console.log(err);
+        }
+
+        window.location = 'https://github.com';
+      });
+
     });
   }
 });

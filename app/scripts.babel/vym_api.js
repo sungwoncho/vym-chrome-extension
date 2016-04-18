@@ -35,5 +35,13 @@ export default {
       `/${options.repoName}`;
 
     get({url, qs: {vymToken: options.vymToken}, json: true}, done);
+  },
+
+  syncRepoAccess(options, done) {
+    let url =
+      '__VYM_HOST__/api/v1' +
+      '/user/sync_access';
+
+    get({url, qs: {vymToken: options.vymToken}}, done);
   }
 };
