@@ -14,7 +14,7 @@ import replace from 'gulp-replace';
 import rename from 'gulp-rename';
 
 const $ = gulpLoadPlugins();
-const vymHost = process.env.NODE_ENV === 'production' ? 'https://vym.io' : 'https://513745a2.ngrok.io';
+const vymHost = process.env.NODE_ENV === 'production' ? 'https://vym.io' : 'https://adaf67df.ngrok.io';
 
 gulp.task('extras', () => {
   return gulp.src([
