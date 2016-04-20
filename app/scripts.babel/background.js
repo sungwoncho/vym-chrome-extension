@@ -1,5 +1,3 @@
-'use strict';
-
 chrome.runtime.onInstalled.addListener(details => {
   chrome.storage.sync.get('vymToken', function (items) {
     if (!items.vymToken) {
