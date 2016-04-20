@@ -1,6 +1,6 @@
 {
   "name": "Vym",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "author": "vym",
   "short_name": "A slide deck for your GitHub PR",
   "manifest_version": 2,
