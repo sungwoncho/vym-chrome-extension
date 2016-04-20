@@ -129,7 +129,7 @@ $(document).on('ready', function () {
           console.log(err);
         }
 
-        window.location = 'https://github.com';
+        window.location = 'https://github.com/vymio/vym#welcome';
       });
 
     });

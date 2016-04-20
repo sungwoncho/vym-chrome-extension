@@ -39,7 +39,7 @@
     }
   ],
   "permissions": [
-    "https://vym.io/*",
+    "https://adaf67df.ngrok.io/*",
     "storage"
   ]
 }
