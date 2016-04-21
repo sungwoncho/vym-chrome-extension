@@ -135,3 +135,21 @@ $(document).on('ready', function () {
     });
   }
 });
+
+// Fired on Vym
+$(document).on('ready', function () {
+  // If not logged in on vym app, but logged in on Chrome extension, auto login
+  // Wait a bit for Meteor to finish rendering
+  setTimeout(function () {
+    if ($('.vym-not-logged-in').length !== 0) {
+      debug('not logged in');
+      chrome.storage.sync.get(null, function (items) {
+        debug('items', items);
+
+        if (items.vymToken) {
+          window.location = '__VYM_HOST__/auto_login';
+        }
+      });
+    }
+  }, 3000);
+});

@@ -27,7 +27,7 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://github.com/*"],
+      "matches": ["https://github.com/*", "https://adaf67df.ngrok.io/*"],
       "js": [
         "bower_components/jquery/dist/jquery.min.js",
         "scripts/content_script.js"
