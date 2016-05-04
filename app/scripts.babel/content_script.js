@@ -132,9 +132,19 @@ function initInterface() {
     let repoName = currentPath.split('/')[2];
 
     vymAPI.checkRepoActivated({ownerName, repoName}, function (err, res) {
-      // If repo is activated, just
+      debug('Repo is activated?', res.body)
+
       if ($(".vym-slide-nav").length === 0) {
         $(templates.tab).insertAfter($('.tabnav-tab.js-pjax-history-navigate').has('.octicon-diff'));
+
+        // If repo is not activated, add demo flag
+        if (!res.body.activated) {
+          $('<span/>', {
+            class: `counter`,
+            html: 'demo'
+          }).appendTo('.vym-slide-nav');
+
+        }
       }
 
       $(document).on('click', '.vym-slide-nav', function (e) {
