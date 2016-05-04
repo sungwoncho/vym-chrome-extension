@@ -27,7 +27,7 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://github.com/*", "https://vym.io/*"],
+      "matches": ["https://github.com/*", "https://53880cfd.ngrok.io/*"],
       "js": [
         "bower_components/jquery/dist/jquery.min.js",
         "scripts/content_script.js"
@@ -39,7 +39,7 @@
     }
   ],
   "permissions": [
-    "https://vym.io/*",
+    "https://53880cfd.ngrok.io/*",
     "storage"
   ]
 }

@@ -107,7 +107,7 @@ $(document).on('ready pjax:success', function () {
   initInterface();
 });
 
-// Fired when GitHub is opened after installing the extension
+// Fired after installing the extension
 $(document).on('ready', function () {
   function getParameterByName(name, url) {
     if (!url) url = window.location.href;
@@ -120,6 +120,7 @@ $(document).on('ready', function () {
   }
 
   let vymToken = getParameterByName('vymToken');
+  debug('found a vym token', vymToken);
 
   if (vymToken) {
     chrome.storage.sync.set({vymToken}, function () {
@@ -129,7 +130,7 @@ $(document).on('ready', function () {
           console.log(err);
         }
 
-        window.location = 'https://github.com/vymio/vym#welcome';
+        window.location = '__VYM_HOST__/welcome';
       });
 
     });
