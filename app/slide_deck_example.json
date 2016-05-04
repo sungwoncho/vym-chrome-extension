@@ -1,33 +1,44 @@
 {
-  "slides": [
-    {
-      "sections": [
-        {
-          "type": "file",
-          "fileHeader": ".meteor/versions"
-        },
-        {
-          "type": "file",
-          "fileHeader": ".meteor/packages"
-        }
-      ]
-    },
-    {
-      "sections": [
-        {
-          "type": "file",
-          "fileHeader": "both/routes.js"
-        }
-      ]
-    },
-    {
-      "sections":
-      [
-        {
-          "type": "file",
-          "fileHader": "client/subscriptionj"
-        }
-      ]
-    }
-  ]
+	"_id" : "mEeuWm2EkTysDBwN9",
+	"ownerName" : "vymio",
+	"repoName" : "vym",
+	"prNumber" : 1,
+	"slides" : [
+		{
+			"number" : 1,
+			"uid" : "r11xiLNl",
+			"sections" : [
+				{
+					"type" : "file",
+					"filename" : "client/modules/core/scss/main.scss"
+				},
+				{
+					"type" : "file",
+					"filename" : "client/modules/core/actions/users.js"
+				},
+				{
+					"type" : "file",
+					"filename" : ".meteor/versions"
+				}
+			]
+		},
+		{
+			"number" : 2,
+			"uid" : "BkSgjI4x",
+			"sections" : [
+				{
+					"type" : "file",
+					"filename" : "public/images/demo-1.png"
+				},
+				{
+					"type" : "file",
+					"filename" : "lib/collections/users.js"
+				},
+				{
+					"type" : "file",
+					"filename" : "client/modules/core/components/pricing_section.jsx"
+				}
+			]
+		}
+	]
 }

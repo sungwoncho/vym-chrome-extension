@@ -5,58 +5,122 @@ import debug from './debugger';
 
 debug('Vym is loaded');
 
+function getDemoSlideDeck() {
+  let slideDeck = {
+    ownerName: "vymio",
+    repoName: "vym",
+    prNumber: 1,
+    slides: []
+  };
+
+  let sections = $('.file-header').map(function (index, elm) {
+    return {
+      type: 'file',
+      filename: $(elm).data('path')
+    };
+  });
+
+  sections = $.makeArray(sections);
+
+  for (var i = 0; i < sections.length; i++) {
+    if (i >= 6) {
+      break;
+    }
+
+    if (i >= 0 && i < 2) {
+      if (!slideDeck.slides[0]) {
+        slideDeck.slides[0] = {number: 1, uid: 'demo-1', sections: []};
+      }
+      slideDeck.slides[0].sections.push(sections[i]);
+    }
+
+    if (i >= 2 && i < 4) {
+      if (!slideDeck.slides[1]) {
+        slideDeck.slides[1] = {number: 2, uid: 'demo-2', sections: []};
+      }
+
+      slideDeck.slides[1].sections.push(sections[i]);
+    }
+
+    if (i >= 4 && i < 6) {
+      if (!slideDeck.slides[2]) {
+        slideDeck.slides[2] = {number: 3, uid: 'demo-3', sections: []};
+      }
+
+      slideDeck.slides[2].sections.push(sections[i]);
+    }
+  }
+
+  return slideDeck;
+}
+
 function initEngine() {
   $('.tabnav-tab.js-pjax-history-navigate').removeClass('selected');
   $('.vym-slide-nav').addClass('selected');
 
   debug('Mounting the slide engine and slides...');
 
+  let engine;
   let ownerName = window.location.pathname.split('/')[1];
   let repoName = window.location.pathname.split('/')[2];
   let prNumber = window.location.pathname.split('/')[4];
+
   chrome.storage.sync.get('vymToken', function (items) {
-    vymAPI.getSlideDeck({ownerName, repoName, prNumber, vymToken: items.vymToken}, function (err, res) {
-      debug('Got slide deck', slideDeck);
+    if (items.vymToken) {
+      debug('Getting slide deck from Vym');
+      vymAPI.getSlideDeck({ownerName, repoName, prNumber, vymToken: items.vymToken}, function (err, res) {
+        if (err) {
+          return console.log(err);
+        }
 
-      let {slideDeck} = res.body;
+        let slideDeck;
 
-      if (err) {
-        return console.log(err);
-      }
+        if (res.body && res.body.slideDeck) {
+          slideDeck = res.body.slideDeck;
+          debug('Got slide deck', slideDeck);
+        } else {
+          slideDeck = getDemoSlideDeck();
+          debug('No slideDeck found: using demo instead', slideDeck);
+        }
 
-      if (!slideDeck) {
-        return;
-      }
+        engine = new SlideEngine(slideDeck);
+        engine.mountEngine();
+        engine.mountUncoveredFilesSection();
+        engine.mountSlides();
+      });
+    } else {
+      let slideDeck = getDemoSlideDeck();
+      debug('Got demo slide deck', slideDeck);
 
-      let engine = new SlideEngine(slideDeck);
+      engine = new SlideEngine(slideDeck);
       engine.mountEngine();
       engine.mountUncoveredFilesSection();
       engine.mountSlides();
+    }
+  });
 
-      $(document).on('click', '.vym-nav-next', function () {
-        engine.moveNext();
-      });
-      $(document).on('click', '.vym-nav-prev', function () {
-        engine.movePrev();
-      });
-      $(document).on('click', '.vym-toggle-uncovered-section', function (e) {
-        e.preventDefault();
+  $(document).on('click', '.vym-nav-next', function () {
+    engine.moveNext();
+  });
+  $(document).on('click', '.vym-nav-prev', function () {
+    engine.movePrev();
+  });
+  $(document).on('click', '.vym-toggle-uncovered-section', function (e) {
+    e.preventDefault();
 
-        $('.vym-slides').toggle();
-        $('.vym-uncovered-files-section').toggle();
+    $('.vym-slides').toggle();
+    $('.vym-uncovered-files-section').toggle();
 
-        if ($('.vym-uncovered-files-section').is(':visible')) {
-          $('.vym-slide-navigation').hide();
-          $('.vym-toggle-uncovered-section').text('Back to slides');
-        } else {
-          $('.vym-slide-navigation').show();
-          $('.vym-toggle-uncovered-section').text('View uncovered files');
-        }
-
-      });
-    });
+    if ($('.vym-uncovered-files-section').is(':visible')) {
+      $('.vym-slide-navigation').hide();
+      $('.vym-toggle-uncovered-section').text('Back to slides');
+    } else {
+      $('.vym-slide-navigation').show();
+      $('.vym-toggle-uncovered-section').text('View uncovered files');
+    }
   });
 };
+
 
 function initInterface() {
   const filesPathRegex = /.*\/.*\/pull\/.*/;
@@ -68,9 +132,7 @@ function initInterface() {
     let repoName = currentPath.split('/')[2];
 
     vymAPI.checkRepoActivated({ownerName, repoName}, function (err, res) {
-      if (!res.body.activated) {
-        return;
-      }
+      // If repo is activated, just
       if ($(".vym-slide-nav").length === 0) {
         $(templates.tab).insertAfter($('.tabnav-tab.js-pjax-history-navigate').has('.octicon-diff'));
       }
@@ -94,7 +156,6 @@ function initInterface() {
       if (window.location.hash === '#slides') {
         initEngine();
       }
-
     });
   }
 }
@@ -120,7 +181,6 @@ $(document).on('ready', function () {
   }
 
   let vymToken = getParameterByName('vymToken');
-  debug('found a vym token', vymToken);
 
   if (vymToken) {
     chrome.storage.sync.set({vymToken}, function () {
