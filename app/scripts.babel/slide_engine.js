@@ -3,7 +3,7 @@ import debug from './debugger';
 
 class SlideEngine {
   constructor(slideDeck) {
-    this.slideDeck = slideDeck;
+    this.slideDeck = slideDeck || {};
     this.slideCount = slideDeck.slides.length;
     this.currentSlideNumber = 1;
     this.editMode = false;
@@ -12,6 +12,10 @@ class SlideEngine {
   mountEngine() {
     $('.diff-view').hide(); // Hide the original diff view
     $(templates.engine).insertBefore('.diff-view');
+    debug('slideDeck', this.slideDeck);
+    if (!this.slideDeck.isDemo) {
+      $('.vym-demo-notice').hide();
+    }
   }
 
   mountUncoveredFilesSection() {

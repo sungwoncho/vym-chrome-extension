@@ -6,10 +6,14 @@ import debug from './debugger';
 debug('Vym is loaded');
 
 function getDemoSlideDeck() {
+  let ownerName = window.location.pathname.split('/')[1];
+  let repoName = window.location.pathname.split('/')[2];
+  let prNumber = window.location.pathname.split('/')[4];
   let slideDeck = {
-    ownerName: "vymio",
-    repoName: "vym",
-    prNumber: 1,
+    ownerName: ownerName,
+    repoName: repoName,
+    prNumber: prNumber,
+    isDemo: true,
     slides: []
   };
 
@@ -67,7 +71,8 @@ function initEngine() {
 
   chrome.storage.sync.get('vymToken', function (items) {
     if (items.vymToken) {
-      debug('Getting slide deck from Vym');
+      debug('vymToken found', items.vymToken);
+      debug('Getting slide deck from Vym...');
       vymAPI.getSlideDeck({ownerName, repoName, prNumber, vymToken: items.vymToken}, function (err, res) {
         if (err) {
           return console.log(err);
@@ -75,12 +80,15 @@ function initEngine() {
 
         let slideDeck;
 
-        if (res.body && res.body.slideDeck) {
+        if (res.body && res.body.slideDeck) { // slideDeck exists
           slideDeck = res.body.slideDeck;
           debug('Got slide deck', slideDeck);
-        } else {
+        } else if (res.statusCode === 204) { // repo is not active
           slideDeck = getDemoSlideDeck();
-          debug('No slideDeck found: using demo instead', slideDeck);
+          debug('Repo does not exist. Using a demo slideDeck:', slideDeck);
+        } else { // repo is active but slideDeck doesn't exist. Just halt.
+          debug('Repo active but no slideDeck found');
+          return;
         }
 
         engine = new SlideEngine(slideDeck);
@@ -89,6 +97,7 @@ function initEngine() {
         engine.mountSlides();
       });
     } else {
+      debug('No vymToken found. Getting demo SlideDeck');
       let slideDeck = getDemoSlideDeck();
       debug('Got demo slide deck', slideDeck);
 
@@ -104,6 +113,11 @@ function initEngine() {
   });
   $(document).on('click', '.vym-nav-prev', function () {
     engine.movePrev();
+  });
+  $(document).on('click', '.vym-btn-activate-repo', function () {
+    chrome.runtime.sendMessage({action: 'openTab', url: '__VYM_HOST__/repos'}, function(response) {
+      console.log(response);
+    });
   });
   $(document).on('click', '.vym-toggle-uncovered-section', function (e) {
     e.preventDefault();
