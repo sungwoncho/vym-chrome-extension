@@ -1,6 +1,6 @@
 {
   "name": "Vym",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "author": "vym",
   "short_name": "A slide deck for your GitHub PR",
   "manifest_version": 2,
@@ -27,7 +27,7 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://github.com/*", "https://53880cfd.ngrok.io/*"],
+      "matches": ["https://github.com/*", "https://vym.io/*"],
       "js": [
         "bower_components/jquery/dist/jquery.min.js",
         "scripts/content_script.js"
@@ -39,7 +39,7 @@
     }
   ],
   "permissions": [
-    "https://53880cfd.ngrok.io/*",
+    "https://vym.io/*",
     "storage"
   ]
 }
